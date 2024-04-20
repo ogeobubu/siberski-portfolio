@@ -1,11 +1,12 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import "./sidebar.scss";
-import ToogleButton from "./toggleButton/ToggleButton";
+import ToggleButton from "./toggleButton/ToggleButton";
 import Links from "./links";
 
-const Sidebar = () => {
+const Sidebar: React.FC = () => {
   const [open, setOpen] = useState(false);
+
   const variants = {
     open: {
       clipPath: "circle(1200px at 50px 50px)",
@@ -24,11 +25,12 @@ const Sidebar = () => {
       },
     },
   };
+
   return (
     <motion.div className="sidebar" animate={open ? "open" : "closed"}>
       <motion.div className="bg" variants={variants}>
         <Links />
-        <ToogleButton setOpen={setOpen} />
+        <ToggleButton setOpen={setOpen} />
       </motion.div>
     </motion.div>
   );

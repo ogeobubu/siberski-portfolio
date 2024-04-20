@@ -1,8 +1,9 @@
+import React from "react";
 import Sidebar from "../sidebar";
-import "./navbar.scss";
 import { motion } from "framer-motion";
+import "./navbar.scss";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   return (
     <div className="navbar">
       <Sidebar />

@@ -1,9 +1,13 @@
-import { useRef } from "react";
-import "./parallax.scss";
+import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import "./parallax.scss";
 
-const Parallax = ({ type }) => {
-  const ref = useRef();
+interface ParallaxProps {
+  type: string;
+}
+
+const Parallax: React.FC<ParallaxProps> = ({ type }) => {
+  const ref = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: ref,

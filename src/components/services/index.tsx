@@ -1,6 +1,6 @@
-import { useRef } from "react";
-import "./services.scss";
+import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import "./services.scss";
 
 const variants = {
   initial: {
@@ -19,20 +19,18 @@ const variants = {
   },
 };
 
-const Services = () => {
-  const ref = useRef();
+const Services: React.FC = () => {
+  const ref = useRef<HTMLDivElement>(null);
 
-  const isInView = useInView(ref, { margin: "-100px" });
+  const { ref: inViewRef, inView } = useInView({ threshold: 0.5 });
 
   return (
     <motion.div
       className="services"
       variants={variants}
       initial="initial"
-      // animate="animate"
-      // whileInView="animate"
-      ref={ref}
-      animate={"animate"}
+      animate={inView ? "animate" : "initial"}
+      ref={inViewRef}
     >
       <motion.div className="textContainer" variants={variants}>
         <p>

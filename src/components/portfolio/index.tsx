@@ -1,26 +1,33 @@
-import { useRef } from "react";
-import "./portfolio.scss";
+import React, { useRef } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import "./portfolio.scss";
 
-const items = [
+interface Item {
+  id: number;
+  title: string;
+  videoEmbed: string;
+  desc: string;
+}
+
+const items: Item[] = [
   {
     id: 1,
     title: "TikTok Video 1",
     videoEmbed:
-      '<iframe src="https://www.tiktok.com/@dogsofficial/video/7054466864367226117" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>',
-    desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores ab id ad nesciunt quo aut corporis modi? Voluptate, quos sunt dolorum facilis, id eum sequi placeat accusantium saepe eos laborum.",
+      '<iframe src="https://www.tiktok.com/@alwaysbullish1/video/7344667248591719713" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>',
+    desc: "Let me introduce myself",
   },
   {
     id: 2,
-    title: "TikTok Video 2",
+    title: "TikTok Video 1",
     videoEmbed:
-      '<iframe src="https://www.tiktok.com/@dogsofficial/video/7054466864367226117" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>',
-    desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores ab id ad nesciunt quo aut corporis modi? Voluptate, quos sunt dolorum facilis, id eum sequi placeat accusantium saepe eos laborum.",
+      '<iframe src="https://www.tiktok.com/@alwaysbullish1/video/7356339286477671713" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>',
+    desc: "AML career tips",
   },
 ];
 
-const Single = ({ item }) => {
-  const ref = useRef();
+const Single: React.FC<{ item: Item }> = ({ item }) => {
+  const ref = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -48,8 +55,8 @@ const Single = ({ item }) => {
   );
 };
 
-const Portfolio = () => {
-  const ref = useRef();
+const Portfolio: React.FC = () => {
+  const ref = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: ref,
