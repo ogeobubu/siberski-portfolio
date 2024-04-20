@@ -1,8 +1,14 @@
-import { useRef, useState } from "react";
+import React, { useRef, FormEvent } from "react";
 import "./contact.scss";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, MotionProps } from "framer-motion";
 
-const variants = {
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+}
+
+const variants: MotionProps["variants"] = {
   initial: {
     y: 500,
     opacity: 0,
@@ -17,18 +23,27 @@ const variants = {
   },
 };
 
-const Contact = () => {
-  const ref = useRef();
-  const formRef = useRef();
-  //   const [error, setError] = useState(false);
-  //   const [success, setSuccess] = useState(false);
-
+const Contact: React.FC = () => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
   const isInView = useInView(ref, { margin: "-100px" });
 
-  const sendEmail = (e) => {
+  const sendEmail = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log(formRef.current);
+    const formData: FormData = {
+      name: (
+        e.currentTarget.querySelector('input[name="name"]') as HTMLInputElement
+      ).value,
+      email: (
+        e.currentTarget.querySelector('input[name="email"]') as HTMLInputElement
+      ).value,
+      message: (
+        e.currentTarget.querySelector(
+          'textarea[name="message"]'
+        ) as HTMLTextAreaElement
+      ).value,
+    };
+    console.log(formData);
   };
 
   return (
@@ -94,9 +109,7 @@ const Contact = () => {
           <input type="text" required placeholder="Name" name="name" />
           <input type="email" required placeholder="Email" name="email" />
           <textarea rows={8} placeholder="Message" name="message" />
-          <button>Submit</button>
-          {/* {error && "Error"}
-          {success && "Success"} */}
+          <button type="submit">Submit</button>
         </motion.form>
       </div>
     </motion.div>

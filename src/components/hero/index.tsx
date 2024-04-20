@@ -1,7 +1,7 @@
 import "./hero.scss";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
-const textVariants = {
+const textVariants: Variants = {
   initial: {
     x: -500,
     opacity: 0,
@@ -23,7 +23,8 @@ const textVariants = {
     },
   },
 };
-const sliderVariants = {
+
+const sliderVariants: Variants = {
   initial: {
     x: 0,
   },
