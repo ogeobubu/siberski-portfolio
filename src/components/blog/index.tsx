@@ -1,67 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 // import styles from "./blog.module.scss";
 import { motion } from "framer-motion";
 
 interface BlogPost {
-  id: number;
+  _id: string;
   title: string;
-  excerpt: string;
   content: string;
   author: string;
-  date: string;
-  readTime: string;
-  category: string;
-  image?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-const blogPosts: BlogPost[] = [
-  {
-    id: 1,
-    title: "Understanding Anti-Money Laundering Regulations",
-    excerpt: "A comprehensive guide to AML regulations and their importance in today's financial landscape.",
-    content: "Anti-Money Laundering (AML) regulations are crucial for maintaining the integrity of the global financial system...",
-    author: "AMLDecoded Team",
-    date: "2025-01-15",
-    readTime: "5 min read",
-    category: "AML Basics",
-    image: "/blog1.jpg"
-  },
-  {
-    id: 2,
-    title: "KYC Best Practices for Financial Institutions",
-    excerpt: "Learn the essential Know Your Customer procedures that every financial institution should implement.",
-    content: "Know Your Customer (KYC) procedures are fundamental to AML compliance...",
-    author: "AMLDecoded Team",
-    date: "2025-01-10",
-    readTime: "7 min read",
-    category: "KYC",
-    image: "/blog2.jpg"
-  },
-  {
-    id: 3,
-    title: "Transaction Monitoring: Detecting Suspicious Activities",
-    excerpt: "How advanced transaction monitoring systems help identify and prevent financial crimes.",
-    content: "Transaction monitoring is a critical component of any AML program...",
-    author: "AMLDecoded Team",
-    date: "2025-01-05",
-    readTime: "6 min read",
-    category: "Transaction Monitoring",
-    image: "/blog3.jpg"
-  },
-  {
-    id: 4,
-    title: "Risk Assessment in AML Compliance",
-    excerpt: "Conducting effective risk assessments to strengthen your AML compliance framework.",
-    content: "Risk assessment is the foundation of any effective AML compliance program...",
-    author: "AMLDecoded Team",
-    date: "2024-12-28",
-    readTime: "8 min read",
-    category: "Risk Management",
-    image: "/blog4.jpg"
-  }
-];
-
 const Blog: React.FC = () => {
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch('/api/blogs');
+        const data = await response.json();
+        setBlogPosts(data);
+      } catch (error) {
+        console.error('Failed to fetch blogs:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="blog">
       <div className="blogContainer">
@@ -78,31 +52,56 @@ const Blog: React.FC = () => {
         <div className="blogGrid">
           {blogPosts.map((post, index) => (
             <motion.article
-              key={post.id}
+              key={post._id}
               className="blogCard"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
-              {post.image && (
-                <div className="blogImage">
-                  <img src={post.image} alt={post.title} loading="lazy" />
-                </div>
-              )}
-
               <div className="blogContent">
                 <div className="blogMeta">
-                  <span className="category">{post.category}</span>
-                  <span className="date">{post.date}</span>
-                  <span className="readTime">{post.readTime}</span>
+                  <span className="date">{new Date(post.createdAt).toLocaleDateString()}</span>
                 </div>
 
                 <h2>{post.title}</h2>
-                <p className="excerpt">{post.excerpt}</p>
+                <div
+                  className="excerpt"
+                  dangerouslySetInnerHTML={{
+                    __html: post.content.length > 150
+                      ? post.content.substring(0, 150) + '...'
+                      : post.content
+                  }}
+                />
 
                 <div className="blogFooter">
                   <span className="author">By {post.author}</span>
-                  <button className="readMore">Read More</button>
+                  <Link href={`/blog/${post._id}`}>
+                    <button
+                      className="readMore"
+                      style={{
+                        padding: '10px 20px',
+                        backgroundColor: 'orange',
+                        color: '#0c0c1d',
+                        border: 'none',
+                        borderRadius: '20px',
+                        cursor: 'pointer',
+                        fontSize: '14px',
+                        fontWeight: '500',
+                        transition: 'all 0.3s ease',
+                        boxShadow: '0 4px 15px rgba(255, 165, 0, 0.3)',
+                      }}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(255, 165, 0, 0.4)';
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(255, 165, 0, 0.3)';
+                      }}
+                    >
+                      Read More
+                    </button>
+                  </Link>
                 </div>
               </div>
             </motion.article>
