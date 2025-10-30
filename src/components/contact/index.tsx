@@ -1,12 +1,7 @@
-import React, { useRef, FormEvent } from "react";
-import "./contact.scss";
+import React, { useRef, FormEvent, useState } from "react";
 import { motion, useInView, MotionProps } from "framer-motion";
+import emailjs from '@emailjs/browser';
 
-interface FormData {
-  name: string;
-  email: string;
-  message: string;
-}
 
 const variants: MotionProps["variants"] = {
   initial: {
@@ -27,23 +22,31 @@ const Contact: React.FC = () => {
   const ref = useRef<HTMLDivElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
   const isInView = useInView(ref, { margin: "-100px" });
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
   const sendEmail = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData: FormData = {
-      name: (
-        e.currentTarget.querySelector('input[name="name"]') as HTMLInputElement
-      ).value,
-      email: (
-        e.currentTarget.querySelector('input[name="email"]') as HTMLInputElement
-      ).value,
-      message: (
-        e.currentTarget.querySelector(
-          'textarea[name="message"]'
-        ) as HTMLTextAreaElement
-      ).value,
-    };
-    console.log(formData);
+    setIsLoading(true);
+    setMessage('');
+
+    emailjs.sendForm(
+      'service_id', // Replace with your EmailJS service ID
+      'template_id', // Replace with your EmailJS template ID
+      formRef.current!,
+      'public_key' // Replace with your EmailJS public key
+    )
+    .then((result) => {
+      console.log(result.text);
+      setMessage('Message sent successfully!');
+      formRef.current?.reset();
+    }, (error) => {
+      console.log(error.text);
+      setMessage('Failed to send message. Please try again.');
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
   };
 
   return (
@@ -106,10 +109,13 @@ const Contact: React.FC = () => {
           whileInView={{ opacity: 1 }}
           transition={{ delay: 4, duration: 1 }}
         >
-          <input type="text" required placeholder="Name" name="name" />
-          <input type="email" required placeholder="Email" name="email" />
-          <textarea rows={8} placeholder="Message" name="message" />
-          <button type="submit">Submit</button>
+          <input type="text" required placeholder="Name" name="name" aria-label="Your name" />
+          <input type="email" required placeholder="Email" name="email" aria-label="Your email address" />
+          <textarea rows={8} placeholder="Message" name="message" aria-label="Your message"></textarea>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? 'Sending...' : 'Submit'}
+          </button>
+          {message && <p style={{ color: message.includes('successfully') ? 'green' : 'red' }}>{message}</p>}
         </motion.form>
       </div>
     </motion.div>

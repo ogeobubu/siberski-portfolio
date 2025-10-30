@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import "./portfolio.scss";
 
 interface Item {
   id: number;
@@ -12,17 +11,24 @@ interface Item {
 const items: Item[] = [
   {
     id: 1,
-    title: "TikTok Video 1",
+    title: "Introduction Video",
     videoEmbed:
       '<iframe src="https://www.tiktok.com/@alwaysbullish1/video/7344667248591719713" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>',
     desc: "Let me introduce myself",
   },
   {
     id: 2,
-    title: "TikTok Video 1",
+    title: "AML Career Tips",
     videoEmbed:
       '<iframe src="https://www.tiktok.com/@alwaysbullish1/video/7356339286477671713" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>',
     desc: "AML career tips",
+  },
+  {
+    id: 3,
+    title: "Compliance Insights",
+    videoEmbed:
+      '<iframe src="https://www.tiktok.com/@alwaysbullish1/video/7360000000000000000" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>',
+    desc: "Latest compliance trends and insights",
   },
 ];
 
@@ -47,7 +53,12 @@ const Single: React.FC<{ item: Item }> = ({ item }) => {
           <motion.div className="textContainer" style={{ y }}>
             <h2>{item.title}</h2>
             <p>{item.desc}</p>
-            <button>See Demo</button>
+            <button
+              onClick={() => window.open(`https://www.tiktok.com/@alwaysbullish1/video/${item.videoEmbed.match(/video\/(\d+)/)?.[1]}`, '_blank')}
+              aria-label={`Watch ${item.title} on TikTok`}
+            >
+              Watch on TikTok
+            </button>
           </motion.div>
         </div>
       </div>
