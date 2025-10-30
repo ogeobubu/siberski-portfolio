@@ -48,12 +48,12 @@ const Hero = () => {
           initial="initial"
           animate="animate"
         >
-          <motion.h2 variants={textVariants}>AlwaysBullish</motion.h2>
+          <motion.h2 variants={textVariants}>AMLDecoded</motion.h2>
           <motion.h1 variants={textVariants}>
-            AML & Financial Crime Manager
+            Demystifying Anti-Money Laundering
           </motion.h1>
           <motion.p variants={textVariants} className="subtitle">
-            Expert Regulatory Compliance Professional | Risk Mitigation Specialist
+            Comprehensive Resources for AML Compliance Professionals
           </motion.p>
           <motion.div variants={textVariants} className="buttons">
             <motion.button
@@ -90,69 +90,40 @@ const Hero = () => {
       </motion.div>
       <div className="contentContainer">
         <motion.div
-          className="statsContainer"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
+          className="featuresContainer"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.8 }}
         >
-          <div className="stat">
-            <motion.h3
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5, delay: 1.2 }}
-            >
-              10+
-            </motion.h3>
-            <p>Years Experience</p>
+          <div className="feature">
+            <div className="icon">📚</div>
+            <h4>Expert Books</h4>
+            <p>Comprehensive AML compliance guides</p>
           </div>
-          <div className="stat">
-            <motion.h3
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5, delay: 1.4 }}
-            >
-              500+
-            </motion.h3>
-            <p>Clients Served</p>
+          <div className="feature">
+            <div className="icon">🎥</div>
+            <h4>Educational Content</h4>
+            <p>TikTok videos and tutorials</p>
           </div>
-          <div className="stat">
-            <motion.h3
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5, delay: 1.6 }}
-            >
-              99%
-            </motion.h3>
-            <p>Compliance Success Rate</p>
+          <div className="feature">
+            <div className="icon">🛡️</div>
+            <h4>Compliance Tools</h4>
+            <p>Risk assessment frameworks</p>
+          </div>
+          <div className="feature">
+            <div className="icon">📋</div>
+            <h4>Regulatory Updates</h4>
+            <p>Latest AML regulations and trends</p>
           </div>
         </motion.div>
 
         <motion.div
-          className="featuresContainer"
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 1.0 }}
+          className="ctaContainer"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 1.2 }}
         >
-          <div className="feature">
-            <div className="icon">🎯</div>
-            <h4>Risk Assessment</h4>
-            <p>Comprehensive AML risk evaluation</p>
-          </div>
-          <div className="feature">
-            <div className="icon">📊</div>
-            <h4>Transaction Monitoring</h4>
-            <p>Advanced fraud detection systems</p>
-          </div>
-          <div className="feature">
-            <div className="icon">📋</div>
-            <h4>Regulatory Compliance</h4>
-            <p>Full compliance framework implementation</p>
-          </div>
-          <div className="feature">
-            <div className="icon">🎓</div>
-            <h4>Training & Education</h4>
-            <p>AML certification and staff training</p>
-          </div>
+          <p className="ctaText">Start your AML compliance journey today</p>
         </motion.div>
       </div>
     </div>

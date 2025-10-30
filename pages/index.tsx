@@ -10,72 +10,68 @@ import Contact from "../src/components/contact";
 export default function Home() {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "AlwaysBullish",
-    "jobTitle": "AML & Financial Crime Manager",
-    "description": "Expert Regulatory Compliance Professional specializing in Anti-Money Laundering (AML), Financial Crime Prevention, and Risk Management",
-    "url": "https://alwaysbullish.com",
+    "@type": "WebSite",
+    "name": "AMLDecoded",
+    "description": "Comprehensive resource for Anti-Money Laundering compliance education and professional development",
+    "url": "https://amldecoded.vercel.app",
     "sameAs": [
-      "https://www.facebook.com/alwaysbullish1",
-      "https://www.instagram.com/alwaysbullish1",
-      "https://www.youtube.com/@alwaysbullish1",
-      "https://dribbble.com/alwaysbullish"
+      "https://www.linkedin.com/company/amldecoded"
     ],
-    "knowsAbout": [
+    "publisher": {
+      "@type": "Organization",
+      "name": "AMLDecoded",
+      "url": "https://amldecoded.vercel.app"
+    },
+    "about": [
       "Anti-Money Laundering (AML)",
       "Financial Crime Prevention",
       "Regulatory Compliance",
       "Risk Assessment",
       "KYC (Know Your Customer)",
       "Transaction Monitoring",
-      "Compliance Training",
-      "Financial Services Regulation"
+      "Compliance Training"
     ],
-    "hasOccupation": {
-      "@type": "Occupation",
-      "name": "AML & Financial Crime Manager",
-      "occupationLocation": {
-        "@type": "Country",
-        "name": "United Kingdom"
+    "offers": [
+      {
+        "@type": "Book",
+        "name": "Mastering AML Compliance",
+        "description": "Comprehensive guide to Anti-Money Laundering"
+      },
+      {
+        "@type": "Book",
+        "name": "Financial Crime Prevention",
+        "description": "Advanced techniques for modern banking"
       }
-    },
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+44-123-123-123",
-      "email": "mail@alwaysbullish.com",
-      "contactType": "Professional",
-      "areaServed": "GB",
-      "availableLanguage": "English"
-    }
+    ]
   };
 
   return (
     <>
       <Head>
-        <title>AlwaysBullish | AML & Financial Crime Manager - Regulatory Compliance Expert</title>
-        <meta name="description" content="AlwaysBullish - AML & Financial Crime Manager specializing in regulatory compliance, risk mitigation, and financial crime prevention. Expert in Anti-Money Laundering (AML), KYC, and compliance solutions." />
-        <meta name="keywords" content="AML, Financial Crime, Compliance, Regulatory, Anti-Money Laundering, KYC, Risk Assessment, Finance Professional, Compliance Manager, Financial Services, AlwaysBullish" />
-        <meta name="author" content="AlwaysBullish" />
+        <title>AMLDecoded | Demystifying Anti-Money Laundering Compliance</title>
+        <meta name="description" content="AMLDecoded - Your comprehensive resource for Anti-Money Laundering compliance. Expert books, educational content, and tools to help you navigate AML regulations and best practices." />
+        <meta name="keywords" content="AML, Anti-Money Laundering, Compliance, Regulatory Compliance, Financial Crime Prevention, AML Training, KYC, Risk Assessment, Compliance Tools, AMLDecoded" />
+        <meta name="author" content="AMLDecoded" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="revisit-after" content="7 days" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="canonical" href="https://alwaysbullish.com" />
+        <link rel="canonical" href="https://amldecoded.vercel.app" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://alwaysbullish.com" />
-        <meta property="og:title" content="AlwaysBullish | AML & Financial Crime Manager" />
-        <meta property="og:description" content="Expert Regulatory Compliance Professional specializing in Anti-Money Laundering (AML), Financial Crime Prevention, and Risk Management" />
-        <meta property="og:image" content="https://alwaysbullish.com/og-image.jpg" />
-        <meta property="og:site_name" content="AlwaysBullish Portfolio" />
+        <meta property="og:url" content="https://amldecoded.vercel.app" />
+        <meta property="og:title" content="AMLDecoded | Demystifying Anti-Money Laundering Compliance" />
+        <meta property="og:description" content="Your comprehensive resource for Anti-Money Laundering compliance. Expert books, educational content, and tools to help you navigate AML regulations." />
+        <meta property="og:image" content="https://amldecoded.vercel.app/og-image.jpg" />
+        <meta property="og:site_name" content="AMLDecoded" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://alwaysbullish.com" />
-        <meta property="twitter:title" content="AlwaysBullish | AML & Financial Crime Manager" />
-        <meta property="twitter:description" content="Expert Regulatory Compliance Professional specializing in Anti-Money Laundering (AML), Financial Crime Prevention, and Risk Management" />
-        <meta property="twitter:image" content="https://alwaysbullish.com/twitter-image.jpg" />
+        <meta property="twitter:url" content="https://amldecoded.vercel.app" />
+        <meta property="twitter:title" content="AMLDecoded | Demystifying Anti-Money Laundering Compliance" />
+        <meta property="twitter:description" content="Your comprehensive resource for Anti-Money Laundering compliance. Expert books, educational content, and tools to help you navigate AML regulations." />
+        <meta property="twitter:image" content="https://amldecoded.vercel.app/twitter-image.jpg" />
 
         {/* Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
