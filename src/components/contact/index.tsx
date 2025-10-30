@@ -1,6 +1,6 @@
 import React, { useRef, FormEvent, useState } from "react";
 import { motion, useInView, MotionProps } from "framer-motion";
-import emailjs from '@emailjs/browser';
+// import emailjs from '@emailjs/browser';
 
 
 const variants: MotionProps["variants"] = {
@@ -25,28 +25,41 @@ const Contact: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  const sendEmail = (e: FormEvent<HTMLFormElement>) => {
+  const sendEmail = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setMessage('');
 
-    emailjs.sendForm(
-      'service_id', // Replace with your EmailJS service ID
-      'template_id', // Replace with your EmailJS template ID
-      formRef.current!,
-      'public_key' // Replace with your EmailJS public key
-    )
-    .then((result) => {
-      console.log(result.text);
-      setMessage('Message sent successfully!');
-      formRef.current?.reset();
-    }, (error) => {
-      console.log(error.text);
+    try {
+      const formData = new FormData(e.currentTarget);
+      const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        message: formData.get('message'),
+      };
+
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setMessage('Message sent successfully!');
+        formRef.current?.reset();
+      } else {
+        setMessage(result.message || 'Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
       setMessage('Failed to send message. Please try again.');
-    })
-    .finally(() => {
+    } finally {
       setIsLoading(false);
-    });
+    }
   };
 
   return (
@@ -61,15 +74,11 @@ const Contact: React.FC = () => {
         <motion.h1 variants={variants}>Let’s work together</motion.h1>
         <motion.div className="item" variants={variants}>
           <h2>Mail</h2>
-          <span>mail@alwaysbullish.com</span>
+          <span>sibe@amldecoded.com</span>
         </motion.div>
         <motion.div className="item" variants={variants}>
           <h2>Address</h2>
           <span>London, UK</span>
-        </motion.div>
-        <motion.div className="item" variants={variants}>
-          <h2>Phone</h2>
-          <span>+44 (123 123 123)</span>
         </motion.div>
       </motion.div>
       <div className="formContainer">
@@ -111,7 +120,7 @@ const Contact: React.FC = () => {
         >
           <input type="text" required placeholder="Name" name="name" aria-label="Your name" />
           <input type="email" required placeholder="Email" name="email" aria-label="Your email address" />
-          <textarea rows={8} placeholder="Message" name="message" aria-label="Your message"></textarea>
+          <textarea rows={8} placeholder="How can we help?" name="message" aria-label="How can we help?"></textarea>
           <button type="submit" disabled={isLoading}>
             {isLoading ? 'Sending...' : 'Submit'}
           </button>

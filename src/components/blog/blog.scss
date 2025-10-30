@@ -1,0 +1,239 @@
+.blog {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0c0c1d, #111132);
+  color: white;
+  padding: 100px 0;
+
+  .blogContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+
+      h1 {
+        font-size: 48px;
+        margin-bottom: 20px;
+        background: linear-gradient(45deg, #fff, #b0b0b0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+
+        @media (max-width: 738px) {
+          font-size: 32px;
+        }
+      }
+
+      p {
+        font-size: 20px;
+        color: #b0b0b0;
+        max-width: 600px;
+        margin: 0 auto;
+
+        @media (max-width: 738px) {
+          font-size: 16px;
+          padding: 0 20px;
+        }
+      }
+    }
+
+    .blogGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+
+      @media (max-width: 738px) {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .blogCard {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .blogImage {
+          height: 200px;
+          overflow: hidden;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+          }
+
+          &:hover img {
+            transform: scale(1.05);
+          }
+        }
+
+        .blogContent {
+          padding: 25px;
+
+          .blogMeta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 12px;
+
+            .category {
+              background: orange;
+              color: white;
+              padding: 4px 8px;
+              border-radius: 10px;
+              font-weight: 500;
+            }
+
+            .date,
+            .readTime {
+              color: #b0b0b0;
+            }
+          }
+
+          h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: white;
+            line-height: 1.3;
+
+            @media (max-width: 738px) {
+              font-size: 20px;
+            }
+          }
+
+          .excerpt {
+            color: #d0d0d0;
+            line-height: 1.6;
+            margin-bottom: 20px;
+          }
+
+          .blogFooter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .author {
+              color: #b0b0b0;
+              font-size: 14px;
+            }
+
+            .readMore {
+              background: orange;
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              border-radius: 20px;
+              font-size: 14px;
+              cursor: pointer;
+              transition: all 0.3s ease;
+
+              &:hover {
+                background: darken(orange, 10%);
+                transform: translateY(-2px);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .newsletter {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      padding: 40px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      @media (max-width: 738px) {
+        padding: 30px 20px;
+      }
+
+      h2 {
+        font-size: 32px;
+        margin-bottom: 15px;
+        color: white;
+
+        @media (max-width: 738px) {
+          font-size: 24px;
+        }
+      }
+
+      p {
+        color: #b0b0b0;
+        font-size: 16px;
+        margin-bottom: 25px;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+
+        @media (max-width: 738px) {
+          font-size: 14px;
+        }
+      }
+
+      .newsletterForm {
+        display: flex;
+        gap: 15px;
+        max-width: 400px;
+        margin: 0 auto;
+
+        @media (max-width: 738px) {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        input {
+          flex: 1;
+          padding: 12px 20px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 25px;
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+          font-size: 16px;
+
+          &::placeholder {
+            color: #b0b0b0;
+          }
+
+          &:focus {
+            outline: none;
+            border-color: orange;
+          }
+        }
+
+        button {
+          padding: 12px 25px;
+          background: orange;
+          color: white;
+          border: none;
+          border-radius: 25px;
+          font-size: 16px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: #cc8400;
+            transform: translateY(-2px);
+          }
+
+          @media (max-width: 738px) {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

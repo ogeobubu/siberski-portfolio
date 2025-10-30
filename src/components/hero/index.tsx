@@ -63,12 +63,12 @@ const Hero = () => {
             >
               See the Latest Works
             </motion.button>
-            <Link href="/books">
+            <Link href="/blog">
               <motion.button
                 variants={textVariants}
-                aria-label="View my books"
+                aria-label="Read our blog"
               >
-                My Books
+                Read Our Blog
               </motion.button>
             </Link>
           </motion.div>

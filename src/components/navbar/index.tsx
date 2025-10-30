@@ -19,20 +19,9 @@ const Navbar: React.FC = () => {
         ></motion.span>
         <div className="social">
           {isHomePage ? (
-            <>
-              <a href="https://www.facebook.com/alwaysbullish1" target="_blank" rel="noopener noreferrer">
-                <img src="/facebook.png" alt="Facebook" />
-              </a>
-              <a href="https://www.instagram.com/alwaysbullish1" target="_blank" rel="noopener noreferrer">
-                <img src="/instagram.png" alt="Instagram" />
-              </a>
-              <a href="https://www.youtube.com/@alwaysbullish1" target="_blank" rel="noopener noreferrer">
-                <img src="/youtube.png" alt="YouTube" />
-              </a>
-              <a href="https://dribbble.com/alwaysbullish" target="_blank" rel="noopener noreferrer">
-                <img src="/dribbble.png" alt="Dribbble" />
-              </a>
-            </>
+            <a href="https://www.tiktok.com/@alwaysbullish1" target="_blank" rel="noopener noreferrer">
+              <img src="/tiktok.png" alt="TikTok" />
+            </a>
           ) : (
             <Link href="/" className="homeLink">
               ← Back to Home

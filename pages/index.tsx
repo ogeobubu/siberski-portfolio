@@ -5,7 +5,9 @@ import Hero from "../src/components/hero";
 import Parallax from "../src/components/parallax";
 import Services from "../src/components/services";
 import Portfolio from "../src/components/portfolio";
+import About from "../src/components/about";
 import Contact from "../src/components/contact";
+// import Books from "../src/components/books";
 
 export default function Home() {
   const structuredData = {
@@ -94,6 +96,9 @@ export default function Home() {
       <section id="Homepage">
         <Navbar />
         <Hero />
+      </section>
+      <section id="About">
+        <About />
       </section>
       <section id="Services">
         <Parallax type="services" />
