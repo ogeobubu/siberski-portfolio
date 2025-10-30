@@ -2,9 +2,11 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/blog/[id]": "pages/blog/[id].js",
   "/blog": "pages/blog.js",
-  "/admin/login": "pages/admin/login.js",
-  "/api/blogs/[id]": "pages/api/blogs/[id].js",
   "/api/blogs": "pages/api/blogs.js",
-  "/blog/[id]": "pages/blog/[id].js"
+  "/admin/login": "pages/admin/login.js",
+  "/admin": "pages/admin.js",
+  "/api/auth/login": "pages/api/auth/login.js",
+  "/api/auth/me": "pages/api/auth/me.js"
 }

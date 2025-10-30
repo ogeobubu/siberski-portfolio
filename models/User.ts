@@ -40,7 +40,7 @@ const UserSchema: Schema = new Schema({
 
 // Hash password before saving
 UserSchema.pre('save', async function(next) {
-  const user = this as IUser;
+  const user = this as unknown as IUser;
 
   if (!user.isModified('password')) return next();
 

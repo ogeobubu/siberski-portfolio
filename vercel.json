@@ -5,7 +5,7 @@
     }
   },
   "env": {
-    "MONGODB_URI": "mongodb+srv://ogeobubu_db_user:YDIiooyziGizA32c@cluster0.mongodb.net/blogdb?retryWrites=true&w=majority",
+    "MONGODB_URI": "mongodb://ogeobubu_db_user:YDIiooyziGizA32c@cluster0-shard-00-00.mongodb.net:27017,cluster0-shard-00-01.mongodb.net:27017,cluster0-shard-00-02.mongodb.net:27017/blogdb?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority",
     "JWT_SECRET": "your-super-secret-jwt-key-change-in-production-123456789"
   }
 }
