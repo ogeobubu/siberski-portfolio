@@ -917,7 +917,7 @@ const Admin: React.FC = () => {
                     <div style={{ marginTop: '15px' }}>
                       <img
                         src={formData.image}
-                        alt="Blog preview"
+                        alt={`Preview of blog image for "${formData.title || 'new blog post'}"`}
                         style={{
                           maxWidth: '200px',
                           maxHeight: '150px',

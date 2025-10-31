@@ -20,7 +20,7 @@ const About: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            About Me
+            About AMLDecoded
           </motion.h2>
 
           <motion.div

@@ -113,7 +113,7 @@ const Books: React.FC = () => {
               transition={{ duration: 0.6, delay: index * 0.2 }}
             >
               <div className="bookImage">
-                <img src={book.image} alt={book.title} loading="lazy" />
+                <img src={book.image} alt={`${book.title} - ${book.subtitle} book cover`} loading="lazy" />
                 {book.originalPrice && (
                   <div className="discountBadge">
                     SAVE ${(book.originalPrice - book.price).toFixed(2)}
@@ -160,6 +160,16 @@ const Books: React.FC = () => {
                     Purchase Now
                   </button>
                 </div>
+
+                {/* Internal Links */}
+                <div style={{ marginTop: '15px', fontSize: '12px', color: '#666' }}>
+                  <Link href="/blog" style={{ color: '#666', textDecoration: 'none', marginRight: '15px' }}>
+                    📝 Related Blog Posts
+                  </Link>
+                  <Link href="/#About" style={{ color: '#666', textDecoration: 'none' }}>
+                    👤 About the Author
+                  </Link>
+                </div>
               </div>
             </motion.div>
           ))}
@@ -181,7 +191,7 @@ const Books: React.FC = () => {
 
             <div className="modalBody">
               <div className="selectedBook">
-                <img src={selectedBook.image} alt={selectedBook.title} />
+                <img src={selectedBook.image} alt={`${selectedBook.title} - ${selectedBook.subtitle} book cover`} />
                 <div className="bookInfo">
                   <h3>{selectedBook.title}</h3>
                   <p>{selectedBook.subtitle}</p>

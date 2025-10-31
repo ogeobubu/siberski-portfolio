@@ -39,15 +39,15 @@ const Services = () => {
       <motion.div className="titleContainer" variants={variants}>
         <div className="title">
           <img src="/people.webp" alt="Team collaboration illustration" loading="lazy" />
-          <h1>
+          <h2>
             <motion.b whileHover={{ color: "orange" }}>Unique</motion.b> Ideas
-          </h1>
+          </h2>
         </div>
         <div className="title">
-          <h1>
+          <h2>
             <motion.b whileHover={{ color: "orange" }}>For Your</motion.b>{" "}
             Business.
-          </h1>
+          </h2>
           <button>WHAT WE DO?</button>
         </div>
       </motion.div>
@@ -56,7 +56,7 @@ const Services = () => {
           className="box"
           whileHover={{ background: "lightgray", color: "black" }}
         >
-          <h2>Regulatory Compliance Expertise</h2>
+          <h3>Regulatory Compliance Expertise</h3>
           <p>
             We specialize in regulatory compliance and finance, focusing on Anti
             Money Laundering (AML), Risk Assessment, Transaction Monitoring,
@@ -71,7 +71,7 @@ const Services = () => {
           className="box"
           whileHover={{ background: "lightgray", color: "black" }}
         >
-          <h2>Proven Track Record</h2>
+          <h3>Proven Track Record</h3>
           <p>
             Our team boasts a proven track record in global compliance within
             the financial services sector. Certified in Anti Money Laundering
@@ -85,7 +85,7 @@ const Services = () => {
           className="box"
           whileHover={{ background: "lightgray", color: "black" }}
         >
-          <h2>Adaptability and Forward-Thinking</h2>
+          <h3>Adaptability and Forward-Thinking</h3>
           <p>
             We excel in adapting to evolving regulations, staying ahead of the
             curve to meet new challenges head-on. Trust us to navigate the
@@ -97,7 +97,7 @@ const Services = () => {
           className="box"
           whileHover={{ background: "lightgray", color: "black" }}
         >
-          <h2>Compliance Assurance</h2>
+          <h3>Compliance Assurance</h3>
           <p>
             Count on us to ensure that your team is always prepared to tackle
             new challenges and comply with changing regulations. As adaptable

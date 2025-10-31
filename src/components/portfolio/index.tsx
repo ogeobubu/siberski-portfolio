@@ -51,7 +51,7 @@ const Single: React.FC<{ item: Item }> = ({ item }) => {
             dangerouslySetInnerHTML={{ __html: item.videoEmbed }}
           ></div>
           <motion.div className="textContainer" style={{ y }}>
-            <h2>{item.title}</h2>
+            <h3>{item.title}</h3>
             <p>{item.desc}</p>
             <button
               onClick={() => window.open(`https://www.tiktok.com/@alwaysbullish1/video/${item.videoEmbed.match(/video\/(\d+)/)?.[1]}`, '_blank')}
@@ -82,7 +82,7 @@ const Portfolio: React.FC = () => {
   return (
     <div className="portfolio" ref={ref}>
       <div className="progress">
-        <h1>Recent TikTok Videos</h1>
+        <h2>Recent TikTok Videos</h2>
         <motion.div style={{ scaleX }} className="progressBar"></motion.div>
       </div>
       {items.map((item) => (

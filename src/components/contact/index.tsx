@@ -71,13 +71,13 @@ const Contact: React.FC = () => {
       whileInView="animate"
     >
       <motion.div className="textContainer" variants={variants}>
-        <motion.h1 variants={variants}>Let’s work together</motion.h1>
+        <motion.h2 variants={variants}>Let’s work together</motion.h2>
         <motion.div className="item" variants={variants}>
-          <h2>Mail</h2>
+          <h3>Mail</h3>
           <span>sibe@amldecoded.com</span>
         </motion.div>
         <motion.div className="item" variants={variants}>
-          <h2>Address</h2>
+          <h3>Address</h3>
           <span>London, UK</span>
         </motion.div>
       </motion.div>

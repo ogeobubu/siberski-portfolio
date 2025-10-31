@@ -1,4 +1,14 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://emekao.com/sitemap.xml
+# Disallow admin areas
+Disallow: /admin
+Disallow: /api/
+
+# Allow important resources
+Allow: /blog
+Allow: /books
+Allow: /sitemap.xml
+Allow: /robots.txt
+
+Sitemap: https://amldecoded.com/sitemap.xml

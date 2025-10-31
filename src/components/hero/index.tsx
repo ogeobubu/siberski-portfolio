@@ -48,10 +48,10 @@ const Hero = () => {
           initial="initial"
           animate="animate"
         >
-          <motion.h2 variants={textVariants}>AMLDecoded</motion.h2>
-          <motion.h1 variants={textVariants}>
+          <motion.h1 variants={textVariants}>AMLDecoded</motion.h1>
+          <motion.h2 variants={textVariants}>
             Demystifying Anti-Money Laundering
-          </motion.h1>
+          </motion.h2>
           <motion.p variants={textVariants} className="subtitle">
             Comprehensive Resources for AML Compliance Professionals
           </motion.p>
@@ -97,22 +97,22 @@ const Hero = () => {
         >
           <div className="feature">
             <div className="icon">📚</div>
-            <h4>Expert Books</h4>
+            <h3>Expert Books</h3>
             <p>Comprehensive AML compliance guides</p>
           </div>
           <div className="feature">
             <div className="icon">🎥</div>
-            <h4>Educational Content</h4>
+            <h3>Educational Content</h3>
             <p>TikTok videos and tutorials</p>
           </div>
           <div className="feature">
             <div className="icon">🛡️</div>
-            <h4>Compliance Tools</h4>
+            <h3>Compliance Tools</h3>
             <p>Risk assessment frameworks</p>
           </div>
           <div className="feature">
             <div className="icon">📋</div>
-            <h4>Regulatory Updates</h4>
+            <h3>Regulatory Updates</h3>
             <p>Latest AML regulations and trends</p>
           </div>
         </motion.div>

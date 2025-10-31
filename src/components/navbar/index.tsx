@@ -37,7 +37,7 @@ const Navbar: React.FC = () => {
         <div className="social">
           {isHomePage ? (
             <a href={tiktokUrl} target="_blank" rel="noopener noreferrer">
-              <img src="/tiktok.png" alt="TikTok" />
+              <img src="/tiktok.png" alt="Follow AMLDecoded on TikTok for AML compliance tips and updates" />
             </a>
           ) : (
             <Link href="/" className="homeLink">

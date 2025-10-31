@@ -57,7 +57,7 @@ const Blog: React.FC = () => {
           transition={{ duration: 0.8 }}
         >
           <h1>AMLDecoded Blog</h1>
-          <p>Insights, guides, and updates on Anti-Money Laundering compliance</p>
+          <h2>Insights, guides, and updates on Anti-Money Laundering compliance</h2>
         </motion.div>
 
         <div className="blogGrid">
@@ -88,7 +88,7 @@ const Blog: React.FC = () => {
                   <span className="date">{new Date(post.createdAt).toLocaleDateString()}</span>
                 </div>
 
-                <h2>{post.title}</h2>
+                <h3>{post.title}</h3>
                 <div
                   className="excerpt"
                   dangerouslySetInnerHTML={{
@@ -128,6 +128,16 @@ const Blog: React.FC = () => {
                     </button>
                   </Link>
                 </div>
+
+                {/* Internal Links */}
+                <div style={{ marginTop: '15px', fontSize: '12px', color: '#b0b0b0' }}>
+                  <Link href="/books" style={{ color: '#b0b0b0', textDecoration: 'none', marginRight: '15px' }}>
+                    📚 Related Books
+                  </Link>
+                  <Link href="/#Services" style={{ color: '#b0b0b0', textDecoration: 'none' }}>
+                    🛡️ Our Services
+                  </Link>
+                </div>
               </div>
             </motion.article>
           ))}
@@ -139,7 +149,7 @@ const Blog: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
         >
-          <h2>Stay Updated</h2>
+          <h3>Stay Updated</h3>
           <p>Subscribe to our newsletter for the latest AML insights and regulatory updates.</p>
           <div className="newsletterForm">
             <input type="email" placeholder="Enter your email" />

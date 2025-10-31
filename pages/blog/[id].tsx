@@ -66,10 +66,62 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
       <Head>
         <title>{blog.title} - AMLDecoded</title>
         <meta name="description" content={blog.content.substring(0, 160)} />
+        <meta name="keywords" content="AML, Anti-Money Laundering, Compliance, Financial Crime, Regulatory Updates, AML Insights" />
+        <meta name="author" content={blog.author} />
+        <meta name="robots" content="index, follow" />
+        <meta name="language" content="English" />
+        <meta name="revisit-after" content="7 days" />
+        <link rel="canonical" href={`https://amldecoded.com/blog/${blog._id}`} />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://amldecoded.com/blog/${blog._id}`} />
         <meta property="og:title" content={blog.title} />
         <meta property="og:description" content={blog.content.substring(0, 160)} />
-        <meta property="og:type" content="article" />
-        <meta name="google-site-verification" content="5UE1LEtXWiGmbk9UZJkp3P4JTt4d18RZy6jsVzy7DSU" />
+        {blog.image && <meta property="og:image" content={blog.image} />}
+        <meta property="og:site_name" content="AMLDecoded" />
+        <meta property="article:author" content={blog.author} />
+        <meta property="article:published_time" content={blog.createdAt} />
+        <meta property="article:modified_time" content={blog.updatedAt} />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={`https://amldecoded.com/blog/${blog._id}`} />
+        <meta property="twitter:title" content={blog.title} />
+        <meta property="twitter:description" content={blog.content.substring(0, 160)} />
+        {blog.image && <meta property="twitter:image" content={blog.image} />}
+
+        {/* Article Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              "headline": blog.title,
+              "description": blog.content.substring(0, 160),
+              "image": blog.image || "https://amldecoded.com/og-image.jpg",
+              "datePublished": blog.createdAt,
+              "dateModified": blog.updatedAt,
+              "author": {
+                "@type": "Person",
+                "name": blog.author
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "AMLDecoded",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://amldecoded.com/logo.png"
+                }
+              },
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": `https://amldecoded.com/blog/${blog._id}`
+              }
+            }),
+          }}
+        />
       </Head>
 
       <Navbar />
@@ -81,6 +133,25 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
         fontFamily: '"DM Sans", sans-serif',
         padding: '20px 0',
       }}>
+        {/* Breadcrumb Navigation */}
+        <div style={{
+          maxWidth: '1366px',
+          margin: '0 auto',
+          padding: '0 30px',
+          marginBottom: '20px',
+        }}>
+          <nav aria-label="Breadcrumb" style={{
+            fontSize: '14px',
+            color: '#b0b0b0',
+          }}>
+            <Link href="/" style={{ color: '#b0b0b0', textDecoration: 'none' }}>Home</Link>
+            <span style={{ margin: '0 8px' }}>›</span>
+            <Link href="/blog" style={{ color: '#b0b0b0', textDecoration: 'none' }}>Blog</Link>
+            <span style={{ margin: '0 8px' }}>›</span>
+            <span style={{ color: 'white' }}>{blog.title}</span>
+          </nav>
+        </div>
+
         {/* Navigation */}
         <div style={{
           maxWidth: '1366px',
@@ -206,31 +277,81 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
             }}>
               Stay updated with the latest AML insights and regulatory updates.
             </p>
-            <Link href="/blog">
-              <button style={{
-                padding: '15px 30px',
-                backgroundColor: 'orange',
-                color: '#0c0c1d',
-                border: 'none',
-                borderRadius: '25px',
-                fontSize: '16px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 4px 15px rgba(255, 165, 0, 0.3)',
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 6px 20px rgba(255, 165, 0, 0.4)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 15px rgba(255, 165, 0, 0.3)';
-              }}
-              >
-                Read More Articles
-              </button>
-            </Link>
+            <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link href="/blog">
+                <button style={{
+                  padding: '15px 30px',
+                  backgroundColor: 'orange',
+                  color: '#0c0c1d',
+                  border: 'none',
+                  borderRadius: '25px',
+                  fontSize: '16px',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 15px rgba(255, 165, 0, 0.3)',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(255, 165, 0, 0.4)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(255, 165, 0, 0.3)';
+                }}
+                >
+                  Read More Articles
+                </button>
+              </Link>
+              <Link href="/books">
+                <button style={{
+                  padding: '15px 30px',
+                  backgroundColor: 'transparent',
+                  color: 'white',
+                  border: '1px solid white',
+                  borderRadius: '25px',
+                  fontSize: '16px',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = 'white';
+                  e.currentTarget.style.color = '#0c0c1d';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = 'white';
+                }}
+                >
+                  📚 Explore Our Books
+                </button>
+              </Link>
+              <Link href="/#Contact">
+                <button style={{
+                  padding: '15px 30px',
+                  backgroundColor: 'transparent',
+                  color: 'white',
+                  border: '1px solid white',
+                  borderRadius: '25px',
+                  fontSize: '16px',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = 'white';
+                  e.currentTarget.style.color = '#0c0c1d';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = 'white';
+                }}
+                >
+                  💬 Get in Touch
+                </button>
+              </Link>
+            </div>
           </footer>
         </div>
       </div>
