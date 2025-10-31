@@ -32,7 +32,7 @@
       border-top: 0.5px solid gray;
 
       @include mobile {
-        width: 300px;
+        width: 250px;
       }
     }
   }
@@ -64,18 +64,18 @@
         object-fit: cover;
 
         @include mobile {
-          width: 200px;
-          height: 50px;
+          width: 180px;
+          height: 45px;
         }
       }
 
-      h1 {
-        font-size: 96px;
+      h2 {
+        font-size: 48px;
         font-weight: 100;
         color: white;
 
         @include mobile {
-          font-size: 36px;
+          font-size: 28px;
         }
       }
 
@@ -85,13 +85,19 @@
         border-radius: 50px;
         background-color: orange;
         border: none;
-        font-size: 24px;
+        font-size: 20px;
         cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: darken(orange, 10%);
+          transform: translateY(-2px);
+        }
 
         @include mobile {
           font-size: 16px;
-          width: 150px;
-          height: 50px;
+          width: 180px;
+          height: 60px;
         }
       }
     }
@@ -123,7 +129,10 @@
 
       p {
         @include mobile {
-          display: none;
+          display: block;
+          font-size: 14px;
+          line-height: 1.4;
+          margin-bottom: 15px;
         }
       }
 

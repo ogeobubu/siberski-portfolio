@@ -51,15 +51,10 @@
         @include mobile {
           width: 100%;
           max-height: 300px;
-        }
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-
-          @include mobile {
-            object-fit: contain;
+          iframe {
+            width: 100%;
+            height: 100%;
+            max-height: 300px;
           }
         }
       }
@@ -77,20 +72,22 @@
           text-align: center;
         }
 
-        h2 {
-          font-size: 72px;
+        h3 {
+          font-size: 24px;
+          margin-bottom: 10px;
 
           @include mobile {
-            font-size: 36px;
+            font-size: 20px;
           }
         }
 
         p {
           color: gray;
-          font-size: 20px;
+          font-size: 16px;
+          margin-bottom: 15px;
 
           @include mobile {
-            font-size: 16px;
+            font-size: 14px;
           }
         }
 
@@ -98,9 +95,21 @@
           background-color: orange;
           border: none;
           border-radius: 10px;
-          padding: 10px;
-          width: 200px;
+          padding: 12px 20px;
           cursor: pointer;
+          font-size: 14px;
+          font-weight: 500;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background-color: darken(orange, 10%);
+            transform: translateY(-2px);
+          }
+
+          @include mobile {
+            width: 100%;
+            padding: 15px;
+          }
         }
       }
     }
