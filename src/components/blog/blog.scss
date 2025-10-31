@@ -9,6 +9,48 @@
     margin: 0 auto;
     padding: 0 20px;
 
+    .loadingContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      text-align: center;
+      animation: fadeIn 0.8s ease-out;
+
+      .loadingSpinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        border-left: 4px solid orange;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 30px;
+      }
+
+      h3 {
+        font-size: 24px;
+        color: white;
+        margin-bottom: 15px;
+        font-weight: 500;
+
+        @media (max-width: 738px) {
+          font-size: 20px;
+        }
+      }
+
+      p {
+        font-size: 16px;
+        color: #b0b0b0;
+        max-width: 400px;
+
+        @media (max-width: 738px) {
+          font-size: 14px;
+          padding: 0 20px;
+        }
+      }
+    }
+
     .header {
       text-align: center;
       margin-bottom: 60px;
@@ -144,6 +186,23 @@
                 transform: translateY(-2px);
               }
             }
+          }
+        }
+        
+        // Loading animations
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
           }
         }
       }

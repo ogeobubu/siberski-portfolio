@@ -8,6 +8,7 @@ interface BlogPost {
   title: string;
   content: string;
   author: string;
+  image?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -33,7 +34,17 @@ const Blog: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="blog">
+        <div className="blogContainer">
+          <div className="loadingContainer">
+            <div className="loadingSpinner"></div>
+            <h3>Loading amazing AML insights...</h3>
+            <p>Please wait while we fetch the latest blog posts</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -58,6 +69,20 @@ const Blog: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
+              {post.image && (
+                <div className="blogImage">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    style={{
+                      width: '100%',
+                      height: '200px',
+                      objectFit: 'cover',
+                      borderRadius: '8px 8px 0 0'
+                    }}
+                  />
+                </div>
+              )}
               <div className="blogContent">
                 <div className="blogMeta">
                   <span className="date">{new Date(post.createdAt).toLocaleDateString()}</span>

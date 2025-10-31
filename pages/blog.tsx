@@ -1,5 +1,6 @@
 import React from "react";
 import Head from "next/head";
+import Navbar from "../src/components/navbar";
 import Blog from "../src/components/blog";
 
 export default function BlogPage() {
@@ -29,6 +30,7 @@ export default function BlogPage() {
         <link rel="canonical" href="https://amldecoded.vercel.app/blog" />
       </Head>
 
+      <Navbar />
       <Blog />
     </>
   );

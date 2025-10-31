@@ -2,12 +2,14 @@ import React from 'react';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import Navbar from '../../src/components/navbar';
 
 interface BlogPost {
   _id: string;
   title: string;
   content: string;
   author: string;
+  image?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -69,6 +71,8 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
         <meta property="og:type" content="article" />
       </Head>
 
+      <Navbar />
+
       <div style={{
         minHeight: '100vh',
         background: 'linear-gradient(180deg, #0c0c1d, #111132)',
@@ -116,6 +120,21 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
         }}>
           {/* Article Header */}
           <header style={{ marginBottom: '50px', textAlign: 'center' }}>
+            {blog.image && (
+              <div style={{ marginBottom: '30px' }}>
+                <img
+                  src={blog.image}
+                  alt={blog.title}
+                  style={{
+                    maxWidth: '100%',
+                    height: '400px',
+                    objectFit: 'cover',
+                    borderRadius: '12px',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                  }}
+                />
+              </div>
+            )}
             <h1 style={{
               fontSize: '48px',
               fontWeight: 'bold',

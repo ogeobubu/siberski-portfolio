@@ -12,6 +12,7 @@ interface BlogPost {
   title: string;
   content: string;
   author: string;
+  image?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -40,12 +41,26 @@ const Admin: React.FC = () => {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    author: ''
+    author: '',
+    image: ''
   });
+  const [uploading, setUploading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterAuthor, setFilterAuthor] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [blogsPerPage] = useState(10);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [blogToDelete, setBlogToDelete] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const [reactQuillKey, setReactQuillKey] = useState(0);
+  const [tiktokUrl, setTiktokUrl] = useState('');
   const router = useRouter();
 
   useEffect(() => {
     checkAuth();
+    fetchTiktokUrl();
   }, []);
 
   const checkAuth = async () => {
@@ -108,6 +123,22 @@ const Admin: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Form validation
+    if (!formData.title.trim()) {
+      showToastNotification('Title is required', 'error');
+      return;
+    }
+    if (!formData.author.trim()) {
+      showToastNotification('Author is required', 'error');
+      return;
+    }
+    if (!formData.content.trim()) {
+      showToastNotification('Content is required', 'error');
+      return;
+    }
+
+    setUploading(true);
     try {
       const token = localStorage.getItem('adminToken');
       const url = editingBlog ? `/api/blogs/${editingBlog._id}` : '/api/blogs';
@@ -124,11 +155,17 @@ const Admin: React.FC = () => {
 
       if (response.ok) {
         fetchBlogs();
-        setFormData({ title: '', content: '', author: '' });
+        setFormData({ title: '', content: '', author: '', image: '' });
         setEditingBlog(null);
+        showToastNotification(editingBlog ? 'Blog post updated successfully' : 'Blog post created successfully', 'success');
+      } else {
+        showToastNotification('Failed to save blog post', 'error');
       }
     } catch (error) {
       console.error('Failed to save blog:', error);
+      showToastNotification('Failed to save blog post', 'error');
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -138,26 +175,84 @@ const Admin: React.FC = () => {
       title: blog.title,
       content: blog.content,
       author: blog.author,
+      image: blog.image || '',
     });
   };
 
-  const handleDelete = async (id: string) => {
-    if (confirm('Are you sure you want to delete this blog post?')) {
-      try {
-        const token = localStorage.getItem('adminToken');
-        const response = await fetch(`/api/blogs/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+  const showToastNotification = (message: string, type: 'success' | 'error') => {
+    setToastMessage(message);
+    setToastType(type);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
 
-        if (response.ok) {
-          fetchBlogs();
-        }
-      } catch (error) {
-        console.error('Failed to delete blog:', error);
+  const handleDelete = async (id: string) => {
+    setBlogToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!blogToDelete) return;
+
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`/api/blogs/${blogToDelete}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        fetchBlogs();
+        showToastNotification('Blog post deleted successfully', 'success');
+      } else {
+        showToastNotification('Failed to delete blog post', 'error');
       }
+    } catch (error) {
+      console.error('Failed to delete blog:', error);
+      showToastNotification('Failed to delete blog post', 'error');
+    } finally {
+      setShowDeleteModal(false);
+      setBlogToDelete(null);
+    }
+  };
+
+  const fetchTiktokUrl = async () => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch('/api/settings', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      const settings = await response.json();
+      setTiktokUrl(settings.tiktokVideoUrl || '');
+    } catch (error) {
+      console.error('Failed to fetch TikTok URL:', error);
+    }
+  };
+
+  const handleSaveTiktokUrl = async () => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ tiktokVideoUrl: tiktokUrl }),
+      });
+
+      if (response.ok) {
+        showToastNotification('TikTok URL updated successfully', 'success');
+      } else {
+        showToastNotification('Failed to update TikTok URL', 'error');
+      }
+    } catch (error) {
+      console.error('Failed to save TikTok URL:', error);
+      showToastNotification('Failed to update TikTok URL', 'error');
     }
   };
 
@@ -168,8 +263,69 @@ const Admin: React.FC = () => {
 
   const handleCancel = () => {
     setEditingBlog(null);
-    setFormData({ title: '', content: '', author: '' });
+    setFormData({ title: '', content: '', author: '', image: '' });
+    // Force re-render of ReactQuill by updating the key
+    setReactQuillKey(prev => prev + 1);
   };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const formDataUpload = new FormData();
+    formDataUpload.append('image', file);
+
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formDataUpload,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFormData({ ...formData, image: data.url });
+        showToastNotification('Image uploaded successfully', 'success');
+      } else {
+        showToastNotification('Failed to upload image', 'error');
+      }
+    } catch (error) {
+      console.error('Upload failed:', error);
+      showToastNotification('Failed to upload image', 'error');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // Filtered and paginated blogs
+  const filteredBlogs = blogs.filter(blog =>
+    blog.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (filterAuthor === '' || blog.author.toLowerCase().includes(filterAuthor.toLowerCase()))
+  );
+
+  const indexOfLastBlog = currentPage * blogsPerPage;
+  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
+  const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
+  const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  // Reset to first page when search/filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterAuthor]);
+
+  // Auto-hide toast after 3 seconds
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => setShowToast(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
 
   if (authLoading || loading) {
     return (
@@ -308,13 +464,90 @@ const Admin: React.FC = () => {
                 Dashboard Overview
               </h2>
 
+              {/* TikTok URL Settings */}
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                padding: '30px',
+                borderRadius: '12px',
+                marginBottom: '50px'
+              }}>
+                <h3 style={{
+                  margin: '0 0 20px 0',
+                  color: 'white',
+                  fontSize: '24px',
+                  textAlign: 'center'
+                }}>
+                  TikTok Video Settings
+                </h3>
+                <div style={{ marginBottom: '20px' }}>
+                  <label htmlFor="tiktokUrl" style={{
+                    display: 'block',
+                    marginBottom: '8px',
+                    color: 'white',
+                    fontWeight: '500',
+                    fontSize: '16px'
+                  }}>
+                    TikTok Video URL:
+                  </label>
+                  <input
+                    type="url"
+                    id="tiktokUrl"
+                    value={tiktokUrl}
+                    onChange={(e) => setTiktokUrl(e.target.value)}
+                    placeholder="https://www.tiktok.com/@username/video/123456789"
+                    style={{
+                      width: '100%',
+                      padding: '15px',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      borderRadius: '8px',
+                      fontSize: '16px',
+                      boxSizing: 'border-box',
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      color: 'white',
+                      fontFamily: '"DM Sans", sans-serif'
+                    }}
+                  />
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <button
+                    onClick={handleSaveTiktokUrl}
+                    style={{
+                      padding: '15px 30px',
+                      backgroundColor: 'orange',
+                      color: '#0c0c1d',
+                      border: 'none',
+                      borderRadius: '25px',
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      fontWeight: '500',
+                      transition: 'all 0.3s ease',
+                      boxShadow: '0 4px 15px rgba(255, 165, 0, 0.3)'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(255, 165, 0, 0.4)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 4px 15px rgba(255, 165, 0, 0.3)';
+                    }}
+                  >
+                    Save TikTok URL
+                  </button>
+                </div>
+              </div>
+
               {/* Analytics Cards */}
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
                 gap: '30px',
                 marginBottom: '50px'
-              }}>
+              }}
+              role="region"
+              aria-label="Dashboard Analytics">
                 <div style={{
                   background: 'rgba(255, 255, 255, 0.05)',
                   backdropFilter: 'blur(10px)',
@@ -650,6 +883,51 @@ const Admin: React.FC = () => {
                   />
                 </div>
 
+                <div style={{ marginBottom: '25px' }}>
+                  <label htmlFor="image" style={{
+                    display: 'block',
+                    marginBottom: '8px',
+                    color: 'white',
+                    fontWeight: '500',
+                    fontSize: '16px'
+                  }}>
+                    Blog Image:
+                  </label>
+                  <input
+                    type="file"
+                    id="image"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploading}
+                    style={{
+                      width: '100%',
+                      padding: '15px',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      borderRadius: '8px',
+                      fontSize: '16px',
+                      boxSizing: 'border-box',
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      color: 'white',
+                      fontFamily: '"DM Sans", sans-serif'
+                    }}
+                  />
+                  {uploading && <p style={{ color: 'orange', marginTop: '8px' }}>Uploading...</p>}
+                  {formData.image && (
+                    <div style={{ marginTop: '15px' }}>
+                      <img
+                        src={formData.image}
+                        alt="Blog preview"
+                        style={{
+                          maxWidth: '200px',
+                          maxHeight: '150px',
+                          borderRadius: '8px',
+                          border: '1px solid rgba(255, 255, 255, 0.2)'
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+
                 <div style={{ marginBottom: '30px' }}>
                   <label htmlFor="content" style={{
                     display: 'block',
@@ -667,6 +945,7 @@ const Admin: React.FC = () => {
                     overflow: 'hidden'
                   }}>
                     <ReactQuill
+                      key={reactQuillKey}
                       value={formData.content}
                       onChange={(value) => setFormData({ ...formData, content: value })}
                       theme="snow"
@@ -702,28 +981,33 @@ const Admin: React.FC = () => {
                 <div style={{ textAlign: 'center' }}>
                   <button
                     type="submit"
+                    disabled={uploading}
                     style={{
                       padding: '15px 30px',
-                      backgroundColor: 'orange',
+                      backgroundColor: uploading ? '#666' : 'orange',
                       color: '#0c0c1d',
                       border: 'none',
                       borderRadius: '25px',
-                      cursor: 'pointer',
+                      cursor: uploading ? 'not-allowed' : 'pointer',
                       fontSize: '16px',
                       fontWeight: '500',
                       transition: 'all 0.3s ease',
-                      boxShadow: '0 4px 15px rgba(255, 165, 0, 0.3)'
+                      boxShadow: uploading ? 'none' : '0 4px 15px rgba(255, 165, 0, 0.3)'
                     }}
                     onMouseOver={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(255, 165, 0, 0.4)';
+                      if (!uploading) {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(255, 165, 0, 0.4)';
+                      }
                     }}
                     onMouseOut={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = '0 4px 15px rgba(255, 165, 0, 0.3)';
+                      if (!uploading) {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(255, 165, 0, 0.3)';
+                      }
                     }}
                   >
-                    {editingBlog ? 'Update Blog Post' : 'Create Blog Post'}
+                    {uploading ? 'Saving...' : (editingBlog ? 'Update Blog Post' : 'Create Blog Post')}
                   </button>
                   {editingBlog && (
                     <button
@@ -755,6 +1039,55 @@ const Admin: React.FC = () => {
                 </div>
               </form>
 
+              {/* Search and Filter Controls */}
+              <div style={{
+                marginBottom: '30px',
+                display: 'flex',
+                gap: '20px',
+                flexWrap: 'wrap',
+                alignItems: 'center'
+              }}>
+                <div style={{ flex: '1', minWidth: '200px' }}>
+                  <input
+                    type="text"
+                    placeholder="Search by title..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '12px 16px',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      borderRadius: '8px',
+                      fontSize: '16px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      color: 'white',
+                      fontFamily: '"DM Sans", sans-serif'
+                    }}
+                  />
+                </div>
+                <div style={{ flex: '1', minWidth: '200px' }}>
+                  <input
+                    type="text"
+                    placeholder="Filter by author..."
+                    value={filterAuthor}
+                    onChange={(e) => setFilterAuthor(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '12px 16px',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      borderRadius: '8px',
+                      fontSize: '16px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      color: 'white',
+                      fontFamily: '"DM Sans", sans-serif'
+                    }}
+                  />
+                </div>
+                <div style={{ color: '#b0b0b0', fontSize: '14px' }}>
+                  Showing {filteredBlogs.length} of {blogs.length} blogs
+                </div>
+              </div>
+
               <div style={{
                 background: 'rgba(255, 255, 255, 0.05)',
                 backdropFilter: 'blur(10px)',
@@ -770,115 +1103,192 @@ const Admin: React.FC = () => {
                 }}>
                   Existing Blog Posts
                 </h3>
-                {blogs.length > 0 ? (
-                  <div style={{ display: 'grid', gap: '20px' }}>
-                    {blogs.map((blog) => (
-                      <div key={blog._id} style={{
-                        padding: '25px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        borderRadius: '12px',
-                        transition: 'all 0.3s ease'
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-3px)';
-                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.3)';
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = 'none';
-                      }}
-                      >
-                        <h4 style={{
-                          margin: '0 0 12px 0',
-                          color: 'white',
-                          fontSize: '20px',
-                          fontWeight: '500'
-                        }}>
-                          {blog.title}
-                        </h4>
-                        <div style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          marginBottom: '15px'
-                        }}>
-                          <span style={{
-                            color: '#b0b0b0',
-                            fontSize: '14px'
+                {filteredBlogs.length > 0 ? (
+                  <>
+                    <div style={{ display: 'grid', gap: '20px' }}>
+                      {currentBlogs.map((blog) => (
+                        <div key={blog._id} style={{
+                          padding: '25px',
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          borderRadius: '12px',
+                          transition: 'all 0.3s ease'
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.transform = 'translateY(-3px)';
+                          e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.3)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.boxShadow = 'none';
+                        }}
+                        >
+                          <h4 style={{
+                            margin: '0 0 12px 0',
+                            color: 'white',
+                            fontSize: '20px',
+                            fontWeight: '500'
                           }}>
-                            By {blog.author} • {new Date(blog.createdAt).toLocaleDateString()}
-                          </span>
+                            {blog.title}
+                          </h4>
+                          <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '15px'
+                          }}>
+                            <span style={{
+                              color: '#b0b0b0',
+                              fontSize: '14px'
+                            }}>
+                              By {blog.author} • {new Date(blog.createdAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <div style={{
+                            margin: '0 0 20px 0',
+                            color: '#b0b0b0',
+                            lineHeight: '1.6',
+                            fontSize: '15px',
+                            maxHeight: '100px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                          }}>
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: blog.content.length > 200
+                                  ? blog.content.substring(0, 200) + '...'
+                                  : blog.content
+                              }}
+                            />
+                          </div>
+                          <div style={{ display: 'flex', gap: '12px' }}>
+                            <button
+                              onClick={() => handleEdit(blog)}
+                              style={{
+                                padding: '10px 20px',
+                                backgroundColor: 'orange',
+                                color: '#0c0c1d',
+                                border: 'none',
+                                borderRadius: '20px',
+                                cursor: 'pointer',
+                                fontSize: '14px',
+                                fontWeight: '500',
+                                transition: 'all 0.3s ease'
+                              }}
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-1px)';
+                                e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 165, 0, 0.3)';
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = 'none';
+                              }}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDelete(blog._id)}
+                              disabled={uploading}
+                              style={{
+                                padding: '10px 20px',
+                                backgroundColor: 'transparent',
+                                color: 'white',
+                                border: '1px solid #dc3545',
+                                borderRadius: '20px',
+                                cursor: uploading ? 'not-allowed' : 'pointer',
+                                fontSize: '14px',
+                                opacity: uploading ? 0.6 : 1,
+                                transition: 'all 0.3s ease'
+                              }}
+                              onMouseOver={(e) => {
+                                if (!uploading) {
+                                  e.currentTarget.style.backgroundColor = '#dc3545';
+                                  e.currentTarget.style.transform = 'translateY(-1px)';
+                                }
+                              }}
+                              onMouseOut={(e) => {
+                                if (!uploading) {
+                                  e.currentTarget.style.backgroundColor = 'transparent';
+                                  e.currentTarget.style.transform = 'translateY(0)';
+                                }
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </div>
-                        <div style={{
-                          margin: '0 0 20px 0',
-                          color: '#b0b0b0',
-                          lineHeight: '1.6',
-                          fontSize: '15px',
-                          maxHeight: '100px',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis'
-                        }}>
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: blog.content.length > 200
-                                ? blog.content.substring(0, 200) + '...'
-                                : blog.content
-                            }}
-                          />
-                        </div>
-                        <div style={{ display: 'flex', gap: '12px' }}>
+                      ))}
+                    </div>
+
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '10px',
+                        marginTop: '30px',
+                        flexWrap: 'wrap'
+                      }}>
+                        <button
+                          onClick={() => paginate(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          style={{
+                            padding: '8px 12px',
+                            backgroundColor: currentPage === 1 ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.2)',
+                            color: currentPage === 1 ? '#666' : 'white',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                            borderRadius: '6px',
+                            cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                            fontSize: '14px',
+                            minWidth: '80px'
+                          }}
+                          aria-label="Go to previous page"
+                        >
+                          Previous
+                        </button>
+
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
                           <button
-                            onClick={() => handleEdit(blog)}
+                            key={number}
+                            onClick={() => paginate(number)}
                             style={{
-                              padding: '10px 20px',
-                              backgroundColor: 'orange',
-                              color: '#0c0c1d',
-                              border: 'none',
-                              borderRadius: '20px',
+                              padding: '8px 12px',
+                              backgroundColor: currentPage === number ? 'orange' : 'rgba(255, 255, 255, 0.1)',
+                              color: currentPage === number ? '#0c0c1d' : 'white',
+                              border: '1px solid rgba(255, 255, 255, 0.2)',
+                              borderRadius: '6px',
                               cursor: 'pointer',
                               fontSize: '14px',
-                              fontWeight: '500',
-                              transition: 'all 0.3s ease'
+                              minWidth: '40px'
                             }}
-                            onMouseOver={(e) => {
-                              e.currentTarget.style.transform = 'translateY(-1px)';
-                              e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 165, 0, 0.3)';
-                            }}
-                            onMouseOut={(e) => {
-                              e.currentTarget.style.transform = 'translateY(0)';
-                              e.currentTarget.style.boxShadow = 'none';
-                            }}
+                            aria-label={`Go to page ${number}`}
+                            aria-current={currentPage === number ? 'page' : undefined}
                           >
-                            Edit
+                            {number}
                           </button>
-                          <button
-                            onClick={() => handleDelete(blog._id)}
-                            style={{
-                              padding: '10px 20px',
-                              backgroundColor: 'transparent',
-                              color: 'white',
-                              border: '1px solid #dc3545',
-                              borderRadius: '20px',
-                              cursor: 'pointer',
-                              fontSize: '14px',
-                              transition: 'all 0.3s ease'
-                            }}
-                            onMouseOver={(e) => {
-                              e.currentTarget.style.backgroundColor = '#dc3545';
-                              e.currentTarget.style.transform = 'translateY(-1px)';
-                            }}
-                            onMouseOut={(e) => {
-                              e.currentTarget.style.backgroundColor = 'transparent';
-                              e.currentTarget.style.transform = 'translateY(0)';
-                            }}
-                          >
-                            Delete
-                          </button>
-                        </div>
+                        ))}
+
+                        <button
+                          onClick={() => paginate(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                          style={{
+                            padding: '8px 12px',
+                            backgroundColor: currentPage === totalPages ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.2)',
+                            color: currentPage === totalPages ? '#666' : 'white',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                            borderRadius: '6px',
+                            cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                            fontSize: '14px',
+                            minWidth: '80px'
+                          }}
+                          aria-label="Go to next page"
+                        >
+                          Next
+                        </button>
                       </div>
-                    ))}
-                  </div>
+                    )}
+                  </>
                 ) : (
                   <p style={{
                     margin: '0',
@@ -887,13 +1297,122 @@ const Admin: React.FC = () => {
                     padding: '60px 20px',
                     fontSize: '16px'
                   }}>
-                    No blog posts yet. Create your first blog post above!
+                    {blogs.length === 0 ? 'No blog posts yet. Create your first blog post above!' : 'No blogs match your search criteria.'}
                   </p>
                 )}
               </div>
             </div>
           )}
         </div>
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteModal && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000
+          }}>
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '12px',
+              padding: '30px',
+              maxWidth: '400px',
+              width: '90%',
+              textAlign: 'center'
+            }}>
+              <h3 style={{
+                color: 'white',
+                margin: '0 0 20px 0',
+                fontSize: '24px'
+              }}>
+                Confirm Delete
+              </h3>
+              <p style={{
+                color: '#b0b0b0',
+                margin: '0 0 30px 0',
+                fontSize: '16px'
+              }}>
+                Are you sure you want to delete this blog post? This action cannot be undone.
+              </p>
+              <div style={{ display: 'flex', gap: '15px', justifyContent: 'center' }}>
+                <button
+                  onClick={() => setShowDeleteModal(false)}
+                  style={{
+                    padding: '12px 24px',
+                    backgroundColor: 'transparent',
+                    color: 'white',
+                    border: '1px solid white',
+                    borderRadius: '25px',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = 'white';
+                    e.currentTarget.style.color = '#0c0c1d';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = 'white';
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  style={{
+                    padding: '12px 24px',
+                    backgroundColor: '#dc3545',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '25px',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(220, 53, 69, 0.4)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Toast Notification */}
+        {showToast && (
+          <div style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            backgroundColor: toastType === 'success' ? '#28a745' : '#dc3545',
+            color: 'white',
+            padding: '15px 20px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+            zIndex: 1001,
+            maxWidth: '300px',
+            fontSize: '14px'
+          }}>
+            {toastMessage}
+          </div>
+        )}
       </div>
     </>
   );
