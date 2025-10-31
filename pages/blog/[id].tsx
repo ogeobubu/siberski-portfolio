@@ -362,6 +362,14 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params!;
 
+  if (!id || typeof id !== 'string') {
+    return {
+      props: {
+        blog: null,
+      },
+    };
+  }
+
   try {
     // Fetch blog from API
     const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/blogs/${id}`);
