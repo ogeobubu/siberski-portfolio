@@ -345,6 +345,7 @@ const Admin: React.FC = () => {
     <>
       <Head>
         <title>Admin Dashboard - AMLDecoded</title>
+        <meta name="google-site-verification" content="5UE1LEtXWiGmbk9UZJkp3P4JTt4d18RZy6jsVzy7DSU" />
       </Head>
 
       <div style={{

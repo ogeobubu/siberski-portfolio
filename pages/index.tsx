@@ -58,6 +58,7 @@ export default function Home() {
         <meta name="language" content="English" />
         <meta name="revisit-after" content="7 days" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="google-site-verification" content="5UE1LEtXWiGmbk9UZJkp3P4JTt4d18RZy6jsVzy7DSU" />
         <link rel="canonical" href="https://amldecoded.vercel.app" />
 
         {/* Open Graph / Facebook */}

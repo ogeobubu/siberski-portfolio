@@ -11,6 +11,7 @@ export default function BlogPage() {
         <meta name="description" content="Stay updated with the latest insights on Anti-Money Laundering compliance, regulatory updates, and best practices from AMLDecoded." />
         <meta name="keywords" content="AML Blog, Compliance Blog, Financial Crime Blog, Regulatory Updates, AML Insights, Compliance Training" />
         <meta name="author" content="AMLDecoded" />
+        <meta name="google-site-verification" content="5UE1LEtXWiGmbk9UZJkp3P4JTt4d18RZy6jsVzy7DSU" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />

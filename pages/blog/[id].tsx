@@ -69,6 +69,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
         <meta property="og:title" content={blog.title} />
         <meta property="og:description" content={blog.content.substring(0, 160)} />
         <meta property="og:type" content="article" />
+        <meta name="google-site-verification" content="5UE1LEtXWiGmbk9UZJkp3P4JTt4d18RZy6jsVzy7DSU" />
       </Head>
 
       <Navbar />
