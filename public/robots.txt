@@ -11,4 +11,4 @@ Allow: /books
 Allow: /sitemap.xml
 Allow: /robots.txt
 
-Sitemap: https://amldecoded.com/sitemap.xml
+Sitemap: https://amldecoded.com/api/sitemap.xml
