@@ -19,13 +19,33 @@ interface BlogDetailProps {
 }
 
 const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
+  // Utility function to strip HTML tags
+  const stripHtml = (html: string) => html.replace(/<[^>]*>/g, '');
+
+  // Utility function to truncate text at word boundary
+  const truncateAtWord = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    const truncated = text.substring(0, maxLength);
+    const lastSpace = truncated.lastIndexOf(' ');
+    return lastSpace > 0 ? truncated.substring(0, lastSpace) : truncated;
+  };
+
+  // Clean and prepare description
+  const cleanContent = stripHtml(blog.content);
+  const description = truncateAtWord(cleanContent, 160);
+
+  // Extract keywords from title and content for better SEO
+  const titleKeywords = blog.title.toLowerCase().split(' ').filter(word => word.length > 3);
+  const contentKeywords = cleanContent.toLowerCase().split(' ').filter(word => word.length > 3 && !['the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'can', 'had', 'her', 'was', 'one', 'our', 'out', 'day', 'get', 'has', 'him', 'his', 'how', 'its', 'may', 'new', 'now', 'old', 'see', 'two', 'who', 'boy', 'did', 'has', 'let', 'put', 'say', 'she', 'too', 'use'].includes(word)).slice(0, 5);
+  const dynamicKeywords = [...new Set([...titleKeywords, ...contentKeywords])].join(', ');
+  const keywords = `AML, Anti-Money Laundering, Compliance, Financial Crime, Regulatory Updates, AML Insights, ${dynamicKeywords}`;
 
   return (
     <>
       <Head>
         <title>{blog.title} - AMLDecoded</title>
-        <meta name="description" content={blog.content.substring(0, 160)} />
-        <meta name="keywords" content="AML, Anti-Money Laundering, Compliance, Financial Crime, Regulatory Updates, AML Insights" />
+        <meta name="description" content={description} />
+        <meta name="keywords" content={keywords} />
         <meta name="author" content={blog.author} />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
@@ -36,7 +56,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
         <meta property="og:type" content="article" />
         <meta property="og:url" content={`https://amldecoded.com/blog/${blog._id}`} />
         <meta property="og:title" content={blog.title} />
-        <meta property="og:description" content={blog.content.substring(0, 160)} />
+        <meta property="og:description" content={description} />
         {blog.image && <meta property="og:image" content={blog.image} />}
         <meta property="og:site_name" content="AMLDecoded" />
         <meta property="article:author" content={blog.author} />
@@ -47,7 +67,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={`https://amldecoded.com/blog/${blog._id}`} />
         <meta property="twitter:title" content={blog.title} />
-        <meta property="twitter:description" content={blog.content.substring(0, 160)} />
+        <meta property="twitter:description" content={description} />
         {blog.image && <meta property="twitter:image" content={blog.image} />}
 
         {/* Article Schema */}
@@ -58,7 +78,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
               "@context": "https://schema.org",
               "@type": "Article",
               "headline": blog.title,
-              "description": blog.content.substring(0, 160),
+              "description": description,
               "image": blog.image || "https://amldecoded.com/og-image.jpg",
               "datePublished": blog.createdAt,
               "dateModified": blog.updatedAt,
