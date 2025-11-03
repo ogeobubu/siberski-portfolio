@@ -15,51 +15,10 @@ interface BlogPost {
 }
 
 interface BlogDetailProps {
-  blog: BlogPost | null;
+  blog: BlogPost;
 }
 
 const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
-  if (!blog) {
-    return (
-      <>
-        <Head>
-          <title>Blog Not Found - AMLDecoded</title>
-        </Head>
-        <div style={{
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'linear-gradient(180deg, #0c0c1d, #111132)',
-          color: 'white',
-          fontFamily: '"DM Sans", sans-serif',
-        }}>
-          <div style={{ textAlign: 'center' }}>
-            <h1 style={{ fontSize: '48px', marginBottom: '20px' }}>Blog Not Found</h1>
-            <p style={{ fontSize: '18px', marginBottom: '30px', color: '#b0b0b0' }}>
-              The blog post you're looking for doesn't exist.
-            </p>
-            <Link href="/blog">
-              <button style={{
-                padding: '15px 30px',
-                backgroundColor: 'orange',
-                color: '#0c0c1d',
-                border: 'none',
-                borderRadius: '25px',
-                fontSize: '16px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 4px 15px rgba(255, 165, 0, 0.3)',
-              }}>
-                ← Back to Blog
-              </button>
-            </Link>
-          </div>
-        </div>
-      </>
-    );
-  }
 
   return (
     <>
@@ -364,9 +323,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (!id || typeof id !== 'string') {
     return {
-      props: {
-        blog: null,
-      },
+      notFound: true,
     };
   }
 
@@ -377,9 +334,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     if (!response.ok) {
       return {
-        props: {
-          blog: null,
-        },
+        notFound: true,
       };
     }
 
@@ -391,9 +346,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } catch (error) {
     console.error('Error fetching blog:', error);
     return {
-      props: {
-        blog: null,
-      },
+      notFound: true,
     };
   }
 };
