@@ -10,6 +10,10 @@
   padding-top: 100px;
   padding-bottom: 30px;
 
+  @include mobile {
+    min-height: auto;
+  }
+
   .aboutContainer {
     max-width: 1400px;
     margin: 0 auto;

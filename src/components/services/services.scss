@@ -6,6 +6,10 @@
   flex-direction: column;
   justify-content: space-between;
 
+  @include mobile {
+    height: auto;
+  }
+
   .textContainer {
     flex: 1;
     align-self: flex-end;

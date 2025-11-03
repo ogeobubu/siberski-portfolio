@@ -1,0 +1,114 @@
+.newsletter {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 30px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  h2 {
+    color: white;
+    font-size: 28px;
+    margin-bottom: 10px;
+
+    @media (max-width: 768px) {
+      font-size: 24px;
+    }
+  }
+
+  p {
+    color: #b0b0b0;
+    font-size: 16px;
+    margin-bottom: 25px;
+    line-height: 1.5;
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .form {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+  .input {
+    flex: 1;
+    padding: 15px 20px;
+    background-color: transparent;
+    border: 1px solid white;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+
+    &::placeholder {
+      color: #b0b0b0;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: orange;
+    }
+
+    @media (max-width: 768px) {
+      padding: 12px 15px;
+      font-size: 14px;
+    }
+  }
+
+  .button {
+    padding: 15px 25px;
+    background-color: orange;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover:not(:disabled) {
+      background-color: darken(orange, 10%);
+      transform: translateY(-2px);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+      padding: 12px 20px;
+      font-size: 14px;
+      width: 100%;
+    }
+  }
+
+  .message {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #4CAF50;
+
+    &.error {
+      color: #f44336;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 13px;
+    }
+  }
+}

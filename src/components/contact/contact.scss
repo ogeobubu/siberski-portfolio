@@ -9,6 +9,10 @@
   gap: 50px;
 
   @include mobile {
+    height: auto;
+  }
+
+  @include mobile {
     width: 100%;
     padding: 20px 15px;
     flex-direction: column;

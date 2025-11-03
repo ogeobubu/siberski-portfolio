@@ -22,10 +22,21 @@ html {
   
   section {
     height: 100vh;
-    height: 100dvh; /* Use dynamic viewport height for mobile */
     width: 100vw;
     scroll-snap-align: center;
     overflow: hidden;
+
+    @media (max-width: 768px) {
+      height: auto;
+    }
+  }
+
+  #Newsletter {
+    height: auto;
+    padding: 50px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   @mixin mobile {

@@ -3,6 +3,10 @@
 .portfolio {
   position: relative;
 
+  @include mobile {
+    height: auto;
+  }
+
   .progress {
     position: sticky;
     top: 0;

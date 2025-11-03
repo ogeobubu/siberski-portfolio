@@ -7,6 +7,7 @@ import Services from "../src/components/services";
 import Portfolio from "../src/components/portfolio";
 import About from "../src/components/about";
 import Contact from "../src/components/contact";
+import Newsletter from "../src/components/newsletter";
 // import Books from "../src/components/books";
 
 export default function Home() {
@@ -139,6 +140,9 @@ export default function Home() {
       <Portfolio />
       <section id="Contact">
         <Contact />
+      </section>
+      <section id="Newsletter">
+        <Newsletter />
       </section>
     </>
   );

@@ -1,0 +1,13 @@
+"use strict";(()=>{var e={};e.id=91,e.ids=[91],e.modules={145:e=>{e.exports=require("next/dist/compiled/next-server/pages-api.runtime.prod.js")},6249:(e,t)=>{Object.defineProperty(t,"l",{enumerable:!0,get:function(){return function e(t,r){return r in t?t[r]:"then"in t&&"function"==typeof t.then?t.then(t=>e(t,r)):"function"==typeof t&&"default"===r?t:void 0}}})},9207:(e,t,r)=>{r.r(t),r.d(t,{config:()=>u,default:()=>p,routeModule:()=>c});var o={};r.r(o),r.d(o,{default:()=>l});var s=r(1802),n=r(7153),a=r(6249);let i=require("nodemailer");var d=r.n(i);async function l(e,t){if("POST"!==e.method)return t.status(405).json({message:"Method not allowed"});let{name:r,email:o,message:s}=e.body;if(!r||!o||!s)return t.status(400).json({message:"Missing required fields"});try{let e=d().createTransport({host:"smtp.hostinger.com",port:587,secure:!1,auth:{user:process.env.EMAIL_USER,pass:process.env.EMAIL_PASS}}),n={from:'"AMLDecoded Contact" <sibe@amldecoded.com>',to:"sibe@amldecoded.com",subject:`New Contact Form Message from ${r}`,html:`
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333;">New Contact Form Submission</h2>
+          <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <p><strong>Name:</strong> ${r}</p>
+            <p><strong>Email:</strong> ${o}</p>
+            <p><strong>Message:</strong></p>
+            <p style="white-space: pre-wrap; background: white; padding: 15px; border-radius: 4px; border-left: 4px solid #007bff;">${s}</p>
+          </div>
+          <p style="color: #666; font-size: 12px;">This message was sent from the AMLDecoded contact form.</p>
+          <p style="color: #666; font-size: 12px;">Reply to: ${o}</p>
+        </div>
+      `,replyTo:o};await e.sendMail(n),t.status(200).json({message:"Email sent successfully!"})}catch(e){console.error("Email sending error:",e),t.status(500).json({message:"Failed to send email",error:e instanceof Error?e.message:"Unknown error"})}}let p=(0,a.l)(o,"default"),u=(0,a.l)(o,"config"),c=new s.PagesAPIRouteModule({definition:{kind:n.x.PAGES_API,page:"/api/contact",pathname:"/api/contact",bundlePath:"",filename:""},userland:o})},7153:(e,t)=>{var r;Object.defineProperty(t,"x",{enumerable:!0,get:function(){return r}}),function(e){e.PAGES="PAGES",e.PAGES_API="PAGES_API",e.APP_PAGE="APP_PAGE",e.APP_ROUTE="APP_ROUTE"}(r||(r={}))},1802:(e,t,r)=>{e.exports=r(145)}};var t=require("../../webpack-api-runtime.js");t.C(e);var r=t(t.s=9207);module.exports=r})();
