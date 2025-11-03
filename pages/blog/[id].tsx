@@ -2,6 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { FaTwitter, FaLinkedin, FaFacebook, FaLink } from 'react-icons/fa';
 import Navbar from '../../src/components/navbar';
 
 interface BlogPost {
@@ -231,6 +232,163 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
               dangerouslySetInnerHTML={{ __html: blog.content }}
             />
           </article>
+
+          {/* Social Sharing Section */}
+          <div style={{
+            marginTop: '50px',
+            padding: '30px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '12px',
+            textAlign: 'center',
+          }}>
+            <h3 style={{
+              color: 'white',
+              marginBottom: '15px',
+              fontSize: '20px',
+            }}>
+              Share this article
+            </h3>
+            <p style={{
+              color: '#b0b0b0',
+              marginBottom: '25px',
+              fontSize: '16px',
+            }}>
+              Help spread awareness about AML compliance and financial crime prevention.
+            </p>
+            <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              {/* Twitter Share */}
+              <button
+                onClick={() => {
+                  const url = encodeURIComponent(`https://amldecoded.com/blog/${blog._id}`);
+                  const text = encodeURIComponent(`Check out this AML insight: ${blog.title}`);
+                  window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+                }}
+                style={{
+                  padding: '12px 20px',
+                  backgroundColor: '#1DA1F2',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '25px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(29, 161, 242, 0.4)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <FaTwitter /> Twitter
+              </button>
+
+              {/* LinkedIn Share */}
+              <button
+                onClick={() => {
+                  const url = encodeURIComponent(`https://amldecoded.com/blog/${blog._id}`);
+                  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+                }}
+                style={{
+                  padding: '12px 20px',
+                  backgroundColor: '#0077B5',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '25px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(0, 119, 181, 0.4)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <FaLinkedin /> LinkedIn
+              </button>
+
+              {/* Facebook Share */}
+              <button
+                onClick={() => {
+                  const url = encodeURIComponent(`https://amldecoded.com/blog/${blog._id}`);
+                  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+                }}
+                style={{
+                  padding: '12px 20px',
+                  backgroundColor: '#1877F2',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '25px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(24, 119, 242, 0.4)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <FaFacebook /> Facebook
+              </button>
+
+              {/* Copy Link */}
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`https://amldecoded.com/blog/${blog._id}`);
+                  // Simple feedback - you could enhance this with a toast notification
+                  alert('Link copied to clipboard!');
+                }}
+                style={{
+                  padding: '12px 20px',
+                  backgroundColor: 'transparent',
+                  color: 'white',
+                  border: '1px solid white',
+                  borderRadius: '25px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = 'white';
+                  e.currentTarget.style.color = '#0c0c1d';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = 'white';
+                }}
+              >
+                <FaLink /> Copy Link
+              </button>
+            </div>
+          </div>
 
           {/* Article Footer */}
           <footer style={{
