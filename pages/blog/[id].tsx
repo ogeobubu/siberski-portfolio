@@ -348,8 +348,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   try {
-    // Fetch blog from API
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/blogs/${id}`);
+    // Fetch blog from API - use production URL for server-side rendering
+    const baseUrl = process.env.NEXTAUTH_URL || 'https://amldecoded.com';
+    const response = await fetch(`${baseUrl}/api/blogs/${id}`);
     const blog = await response.json();
 
     if (!response.ok) {
