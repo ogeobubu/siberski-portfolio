@@ -1,7 +1,5 @@
 import React from "react";
 import Head from "next/head";
-import Link from "next/link";
-import Navbar from "../src/components/navbar";
 import Blog from "../src/components/blog";
 
 export default function BlogPage() {
@@ -32,21 +30,6 @@ export default function BlogPage() {
         <link rel="canonical" href="https://amldecoded.com/blog" />
       </Head>
 
-      {/* Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" style={{
-        backgroundColor: '#f8f9fa',
-        padding: '10px 30px',
-        fontSize: '14px',
-        color: '#6c757d',
-      }}>
-        <div style={{ maxWidth: '1366px', margin: '0 auto' }}>
-          <Link href="/" style={{ color: '#6c757d', textDecoration: 'none' }}>Home</Link>
-          <span style={{ margin: '0 8px' }}>›</span>
-          <span style={{ color: '#495057' }}>Blog</span>
-        </div>
-      </nav>
-
-      <Navbar />
       <Blog />
     </>
   );

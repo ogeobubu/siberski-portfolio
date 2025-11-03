@@ -22,7 +22,11 @@ const Blog: React.FC = () => {
       try {
         const response = await fetch('/api/blogs');
         const data = await response.json();
-        setBlogPosts(data);
+        // Sort blogs by createdAt in descending order (most recent first)
+        const sortedBlogs = data.sort((a: BlogPost, b: BlogPost) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setBlogPosts(sortedBlogs);
       } catch (error) {
         console.error('Failed to fetch blogs:', error);
       } finally {
